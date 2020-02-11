@@ -17,6 +17,7 @@ import firesim.bridges.{TraceOutputTop, DeclockedTracedInstruction}
 import midas.targetutils.MemModelAnnotation
 
 import boom.common.BoomTile
+import ariane.ArianeTile
 
 /* Wires out tile trace ports to the top; and wraps them in a Bundle that the
  * TracerV bridge can match on.
@@ -51,7 +52,7 @@ trait HasTraceIOImp extends LazyModuleImp {
 }
 
 trait CanHaveMultiCycleRegfileImp {
-  val outer: utilities.HasBoomAndRocketTiles
+  val outer: utilities.HasChipyardTiles
 
   outer.tiles.map {
     case r: RocketTile => {
@@ -68,6 +69,9 @@ trait CanHaveMultiCycleRegfileImp {
         case frf: boom.exu.RegisterFileSynthesizable => annotate(MemModelAnnotation(frf.regfile))
         case _ => Nil
       }
+    }
+    case a: ArianeTile => {
+      Nil
     }
   }
 }

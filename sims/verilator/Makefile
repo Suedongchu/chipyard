@@ -37,8 +37,8 @@ debug: $(sim_debug)
 #########################################################################################
 # import other necessary rules and variables
 #########################################################################################
+include $(base_dir)/verilator.mk
 include $(base_dir)/common.mk
-include $(sim_dir)/verilator.mk
 
 #########################################################################################
 # verilator binary and flags
@@ -54,17 +54,31 @@ VERILATOR_CC_OPTS = \
 	-CFLAGS "-I$(build_dir) -include $(build_dir)/$(long_name).plusArgs -include $(build_dir)/verilator.h" \
 	-LDFLAGS "$(LDFLAGS)"
 
+# temporary until ariane supports --assert flag
+ifeq ($(shell grep -i "module.*ariane" $(build_dir)/*.*v),)
+	ENABLE_ASSERTS=--assert
+endif
+
 VERILATOR_NONCC_OPTS = \
 	--top-module $(VLOG_MODEL) \
-	+define+PRINTF_COND=\$$c\(\"verbose\",\"\&\&\"\,\"done_reset\"\) \
-	+define+STOP_COND=\$$c\(\"done_reset\"\) \
-	--assert \
+	$(ENABLE_ASSERTS) \
 	--output-split 10000 \
 	--output-split-cfuncs 100 \
-	$(sim_vsrcs) \
-	-f $(sim_common_files)
+	-Wno-STMTDLY \
+	-Werror-IMPLICIT \
+	-Wno-ASSIGNDLY \
+	-Wno-UNOPTFLAT \
+	-Wno-BLKANDNBLK \
+	-Wall \
+	-f $(sim_common_files) \
+	$(sim_vsrcs)
 
-VERILATOR_OPTS = $(VERILATOR_CC_OPTS) $(VERILATOR_NONCC_OPTS)
+# must define variables for the pre-processing step
+VERILATOR_DEFINES = \
+	+define+PRINTF_COND=\$$c\(\"verbose\",\"\&\&\"\,\"done_reset\"\) \
+	+define+STOP_COND=\$$c\(\"done_reset\"\)
+
+VERILATOR_OPTS = $(VERILATOR_CC_OPTS) $(VERILATOR_NONCC_OPTS) $(VERILATOR_DEFINES)
 
 #########################################################################################
 # verilator build paths and file names

@@ -16,6 +16,7 @@ object Generator extends GeneratorApp {
     implicit val p: Parameters = params
     TestSuiteHelper.addRocketTestSuites
     TestSuiteHelper.addBoomTestSuites
+    TestSuiteHelper.addArianeTestSuites
 
     // if hwacha parameter exists then generate its tests
     // TODO: find a more elegant way to do this. either through

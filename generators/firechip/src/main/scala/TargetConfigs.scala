@@ -166,7 +166,7 @@ class FireSimRocketChipSha3L2Config extends Config(
 // SHA-3 accelerator config with synth printfs enabled
 class FireSimRocketChipSha3L2PrintfConfig extends Config(
   new WithInclusiveCache ++
-  new sha3.WithSha3Printf ++ 
+  new sha3.WithSha3Printf ++
   new sha3.WithSha3Accel ++
   new WithNBigCores(1) ++
   new FireSimRocketChipConfig)
@@ -344,3 +344,23 @@ class FireSimTraceGenL2Config extends Config(
     outerLatencyCycles = 50) ++
   new WithTraceGenBridge ++
   new FireSimRocketChipConfig)
+
+//**********************************************************************************
+//* Ariane Configurations
+//*********************************************************************************/
+
+class FireSimArianeConfig extends Config(
+  new WithBootROM ++
+  new WithPeripheryBusFrequency(BigInt(3200000000L)) ++
+  new WithExtMemSize(0x400000000L) ++ // 16GB
+  new WithoutTLMonitors ++
+  new WithUARTKey ++
+  new WithNICKey ++
+  new WithSerial ++
+  new WithBlockDevice ++
+  new WithoutClockGating ++
+  new WithDefaultMemModel ++
+  new ariane.WithNArianeCores(1) ++
+  new WithDefaultFireSimBridges ++
+  new freechips.rocketchip.system.BaseConfig
+)

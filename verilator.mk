@@ -6,7 +6,7 @@
 # verilator version, binary, and path
 #########################################################################################
 VERILATOR_VERSION      = 4.016
-VERILATOR_INSTALL_DIR ?= verilator_install
+VERILATOR_INSTALL_DIR ?= $(base_dir)/verilator-install
 VERILATOR_SRCDIR       = $(VERILATOR_INSTALL_DIR)/src/verilator-$(VERILATOR_VERSION)
 INSTALLED_VERILATOR    = $(abspath $(VERILATOR_INSTALL_DIR)/install/bin/verilator)
 
