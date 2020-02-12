@@ -13,6 +13,22 @@ import freechips.rocketchip.tilelink._
 import freechips.rocketchip.devices.tilelink._
 import freechips.rocketchip.diplomacy._
 import freechips.rocketchip.util.{DontTouch}
+import testchipip.SimDRAM
+
+trait CanHaveBlackBoxSimMemModuleImp { this: CanHaveMasterAXI4MemPortModuleImp =>
+  def connectBlackBoxSimMem() {
+    (mem_axi4 zip outer.memAXI4Node).foreach { case (io, node) =>
+      val memSize = p(ExtMem).get.master.size
+      val lineSize = p(CacheBlockBytes)
+      (io zip node.in).foreach { case (axi4, (_, edge)) =>
+        val mem = Module(new SimDRAM(memSize, lineSize, edge.bundle))
+        mem.io.axi <> axi4
+        mem.io.clock := clock
+        mem.io.reset := reset
+      }
+    }
+  }
+}
 
 // ---------------------------------------------------------------------
 // Base system that uses the debug test module (dtm) to bringup the core
@@ -41,5 +57,6 @@ class SystemModule[+L <: System](_outer: L) extends SubsystemModuleImp(_outer)
   with CanHaveMasterAXI4MemPortModuleImp
   with CanHaveMasterAXI4MMIOPortModuleImp
   with CanHaveSlaveAXI4PortModuleImp
+  with CanHaveBlackBoxSimMemModuleImp
   with HasPeripheryBootROMModuleImp
   with DontTouch

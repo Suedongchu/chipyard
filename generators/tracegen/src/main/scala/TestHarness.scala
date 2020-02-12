@@ -12,7 +12,7 @@ class TestHarness(implicit p: Parameters) extends Module {
 
   val dut = Module(LazyModule(new TraceGenSystem).module)
   io.success := dut.success
-  dut.connectSimAXIMem()
+  dut.connectBlackBoxSimMem()
 }
 
 object Generator extends GeneratorApp {

@@ -5,6 +5,7 @@ import freechips.rocketchip.config.{Field, Parameters}
 import freechips.rocketchip.diplomacy.{LazyModule, LazyModuleImp, BufferParams}
 import freechips.rocketchip.groundtest.{DebugCombiner, TraceGenParams}
 import freechips.rocketchip.subsystem._
+import utilities.CanHaveBlackBoxSimMemModuleImp
 
 case object BoomTraceGenKey extends Field[Seq[TraceGenParams]](Nil)
 case object TraceGenKey extends Field[Seq[TraceGenParams]](Nil)
@@ -50,3 +51,4 @@ class TraceGenSystemModuleImp(outer: TraceGenSystem)
   extends BaseSubsystemModuleImp(outer)
   with HasTraceGenTilesModuleImp
   with CanHaveMasterAXI4MemPortModuleImp
+  with CanHaveBlackBoxSimMemModuleImp
