@@ -360,6 +360,7 @@ class FireSimArianeConfig extends Config(
   new WithBlockDevice ++
   new WithoutClockGating ++
   new WithDefaultMemModel ++
+  new ariane.WithArianeEnableTrace ++
   new ariane.WithNArianeCores(1) ++
   new WithDefaultFireSimBridges ++
   new freechips.rocketchip.system.BaseConfig
